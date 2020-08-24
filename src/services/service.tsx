@@ -1,4 +1,6 @@
 import {questionType,quizType} from './../types/types'
+export const shuffleArray=(array:any[])=>[...array].sort(()=>Math.random()-0.5)
+
 export const service =async (amount:number,difficulty:string): Promise <quizType[]> => {
 
 
@@ -8,7 +10,7 @@ export const service =async (amount:number,difficulty:string): Promise <quizType
         return {
             question:item.question,
             correct_answer:item.correct_answer,
-            options:item.incorrect_answers.concat(item.correct_answer)
+            options:shuffleArray(item.incorrect_answers.concat(item.correct_answer))
         }
     })
 
