@@ -16,12 +16,38 @@ function App() {
   const [question,setQuestion]=useState<quizType[]>([])
   let [nextQuestion,setNextQuestion]=useState(0)
   let [score,setScore]=useState<number>(0)
+  // let [mode,setMode]=useState('Offline')
 
   useEffect(()=>{
    async function fetchData(){
      const questions:quizType[]= await service(5,'easy')
      setQuestion(questions)
-     console.log("questions",questions)
+
+     localStorage.setItem("getOfflineData",JSON.stringify(questions))
+     if(questions.length<0){
+
+       const test:any=localStorage.getItem("getOfflineData")
+        console.log("offline",JSON.parse(test))
+         setQuestion(JSON.parse(test))
+     }
+
+
+  // const url=`https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple`;
+  // fetch(url).then((resp)=>{
+  //   resp.json().then(({results})=>{
+  //     setQuestion(results)
+  //   })
+  // })
+
+
+
+    //  if(!question.length){
+      // setMode('Offline')
+      //  let getOfflineData:quizType[]=localStorage.getItem("getOfflineData")
+      //  setQuestion(getOfflineData)
+    //  }
+
+    //  console.log("questions",questions)
    }
    fetchData()
   },[])
@@ -63,9 +89,11 @@ function handleSubmit(e:React.FormEvent<EventTarget>,selectedAnswer:string){
 
 }
 
-if(!question.length){
-  return <h4 className="loader">Loading...</h4>
-}
+// if(!question.length){
+
+//   // setMode("Offline")
+// return <h4 className="loader">Loading....</h4>
+// }
 
   return (
     <div className="App">
