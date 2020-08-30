@@ -6,13 +6,16 @@ import {service} from './services/service'
 import QuestionCard from './components/QuestionCard'
 import {quizType} from './types/types'
 import {Score} from './components/Score'
+import {Welcome} from './components/Welcome'
 
 function App() {
 
   // const scoreDiv=<Score/>
   let [name,setName]=useState('')
   const [showNext,setShowNext]=useState(false)
-  const [questionComplete,setquestionComplete]=useState(false)
+  const [showWelcome,setShowWelcome]=useState(true)
+  const [showScore,setShowScore]=useState(false)
+  const [getUserName,setGetUserName]=useState(true)
   const [question,setQuestion]=useState<quizType[]>([])
   let [nextQuestion,setNextQuestion]=useState(0)
   let [score,setScore]=useState<number>(0)
@@ -23,40 +26,24 @@ function App() {
      const questions:quizType[]= await service(5,'easy')
      setQuestion(questions)
 
-     localStorage.setItem("getOfflineData",JSON.stringify(questions))
-     if(questions.length<0){
+    //  localStorage.setItem("getOfflineData",JSON.stringify(questions))
 
-       const test:any=localStorage.getItem("getOfflineData")
-        console.log("offline",JSON.parse(test))
-         setQuestion(JSON.parse(test))
-     }
 
 
   // const url=`https://opentdb.com/api.php?amount=5&difficulty=easy&type=multiple`;
-  // fetch(url).then((resp)=>{
-  //   resp.json().then(({results})=>{
-  //     setQuestion(results)
-  //   })
-  // })
 
-
-
-    //  if(!question.length){
-      // setMode('Offline')
-      //  let getOfflineData:quizType[]=localStorage.getItem("getOfflineData")
-      //  setQuestion(getOfflineData)
-    //  }
-
-    //  console.log("questions",questions)
    }
    fetchData()
   },[])
+
+
 
 
 function getName(uName:string){
   // console.log(uName)
   setName(uName)
   console.log(uName)
+  setGetUserName(false)
 
   setShowNext(true)
 
@@ -81,7 +68,10 @@ function handleSubmit(e:React.FormEvent<EventTarget>,selectedAnswer:string){
   }
   else
   {
-    setquestionComplete(true)
+    // setquestionComplete(true)
+    setShowNext(false)
+    setShowWelcome(false)
+    setShowScore(true)
   }
 
 
@@ -89,17 +79,17 @@ function handleSubmit(e:React.FormEvent<EventTarget>,selectedAnswer:string){
 
 }
 
-// if(!question.length){
+if(!question.length){
 
-//   // setMode("Offline")
-// return <h4 className="loader">Loading....</h4>
-// }
+  // setMode("Offline")
+return <h4 className="loader">Loading....</h4>
+}
 
   return (
     <div className="App">
-     <h1>Welcome In quiz app</h1>
-     {questionComplete ? <Score userscore={score} userName={name} totalQuestion={question.length}/> : ''}
-     {!showNext? <Name getNameFunc={getName}/> : ''}
+     {showWelcome ? < Welcome/> : ''}
+     {showScore ? <Score userscore={score} userName={name} totalQuestion={question.length}/> : ''}
+     {getUserName ? <Name getNameFunc={getName}/> : ''}
      {showNext ? <QuestionCard currQuestion={question[nextQuestion].question} options={question[nextQuestion].options}  callback={handleSubmit}/> : ''}
     </div>
   );
