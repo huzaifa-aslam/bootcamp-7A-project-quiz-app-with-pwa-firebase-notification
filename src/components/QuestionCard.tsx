@@ -1,10 +1,7 @@
 import React,{useState} from 'react';
+import {questionCardTypes} from './../types/types'
+// import { Container,Row,Col } from 'react-bootstrap';
 
-export interface questionCardTypes{
-  currQuestion:string
-  options:string[]
-  callback:(e:React.FormEvent<EventTarget>,selectAns:string)=>void
-}
 
 export default function QuestionCard({ currQuestion,options,callback}:questionCardTypes) {
 const [selectAns,setSelectAns]=useState('')
@@ -12,7 +9,7 @@ const [selectAns,setSelectAns]=useState('')
   return (
     <form onSubmit={(e:React.FormEvent<EventTarget>)=>{callback(e,selectAns)}}>
     <p>{currQuestion}:</p>
-    {options.map((item:string,index:number)=>{
+    {options && options.map((item:string,index:number)=>{
         return (
             <div key={index}>
 
